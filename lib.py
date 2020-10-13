@@ -107,6 +107,7 @@ class color(object):
     g = self.g * other
     b = self.b * other
     return color(r, g, b)
+    
   def equals(self, other):
     return (self.r==other.r and self.g==other.g and self.b==other.b)
 

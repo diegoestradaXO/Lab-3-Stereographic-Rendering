@@ -89,9 +89,9 @@ class Raytracer(object):
           eye1 = self.cast_ray(V3(0.4,0,0), direction)
           eye2 = self.cast_ray(V3(-0.4,0,0), direction)
           if not eye1.equals(self.background_color):
-            eye1 = eye1*0.57 + color(100,0,0)                                          #times 0.57 for it to not exceed 255 
+            eye1 = eye1*0.57 + color(100,0,0)                                    
           if not eye2.equals(self.background_color):
-            eye2 = eye2*0.57 + color(0,0,100)                                          #times 0.57 for it to not exceed 255  
+            eye2 = eye2*0.57 + color(0,0,100)                                            
           eye_sum = eye1 + eye2
           self.pixels[y][x] = eye_sum
         else:
