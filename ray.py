@@ -1,6 +1,7 @@
 from lib import *
 from sphere import *
 from math import pi, tan
+import random
 
 BLACK = color(0, 0, 0)
 WHITE = color(255, 255, 255)
@@ -11,7 +12,7 @@ class Raytracer(object):
   def __init__(self, width, height):
     self.width = width
     self.height = height
-    self.background_color = BG
+    self.background_color = BLACK
     self.scene = []
     self.clear()
     self.light = None
@@ -76,14 +77,27 @@ class Raytracer(object):
 
       return material, intersect
 
-  def render(self):
+  def render(self, stereogram=False):
     fov = int(pi/2)
     for y in range(self.height):
       for x in range(self.width):
         i =  (2*(x + 0.5)/self.width - 1) * tan(fov/2) * self.width/self.height
         j =  (2*(y + 0.5)/self.height - 1) * tan(fov/2)
         direction = norm(V3(i, j, -1))
-        self.pixels[y][x] = self.cast_ray(V3(0,0,0), direction)
+        
+        if(stereogram):
+          eye1 = self.cast_ray(V3(0.4,0,0), direction)
+          eye2 = self.cast_ray(V3(-0.4,0,0), direction)
+          if not eye1.equals(self.background_color):
+            eye1 = eye1*0.57 + color(100,0,0)                                          #times 0.57 for it to not exceed 255 
+          if not eye2.equals(self.background_color):
+            eye2 = eye2*0.57 + color(0,0,100)                                          #times 0.57 for it to not exceed 255  
+          eye_sum = eye1 + eye2
+          self.pixels[y][x] = eye_sum
+        else:
+          self.pixels[y][x] = self.cast_ray(V3(1,0,0), direction) 
+  
+
 
 #global
 eye = Material(diffuse = BLACK, albedo = (0.6,  0.3), spec = 35)
@@ -108,7 +122,6 @@ r.light = Light(
   intensity=1
 )
 
-r.background_color = WHITE
 
 r.scene = [
     
@@ -156,5 +169,5 @@ r.scene = [
     Sphere(V3(1, -2.5, -9), 0.70, body2),
     Sphere(V3(-1, -2.5, -9), 0.70, body1),    
 ]
-r.render()
-r.write('out.bmp')
+r.render(stereogram=True)
+r.write('out.bmp') 

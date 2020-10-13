@@ -78,7 +78,6 @@ def barycentric(A, B, C, P):
     bary.y / bary.z,
     bary.x / bary.z
   )
-
 # Utils
 
 def char(c):
@@ -108,6 +107,8 @@ class color(object):
     g = self.g * other
     b = self.b * other
     return color(r, g, b)
+  def equals(self, other):
+    return (self.r==other.r and self.g==other.g and self.b==other.b)
 
   def __repr__(self):
     return "color(%s, %s, %s)" % (self.r, self.g, self.b)
